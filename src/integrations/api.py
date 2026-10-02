@@ -24,8 +24,9 @@ import pandas as pd
 import numpy as np
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, BackgroundTasks, WebSocket, WebSocketDisconnect
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 # Ensure src in sys.path
@@ -38,7 +39,7 @@ from src.module_b import DriftPredictor
 from src.decision import ScreeningDecisionEngine
 from src.explain import generate_qa_report_card
 
-from src.integrations.database import ScreeningDatabase
+from src.integrations.database import ScreeningDatabase, PartRecord
 from src.integrations.ate_parser import ATEDataParser
 from src.integrations.chamber_connector import ChamberController
 from src.integrations.mes_webhook import MESWebhookNotifier
@@ -58,6 +59,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'frontend', 'dist'))
+
+@app.get("/")
+def serve_react_app():
+    """Serves the React SPA index.html"""
+    index_path = os.path.join(frontend_dist, "index.html")
+    if os.path.exists(index_path):
+        with open(index_path, 'r') as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse(content="<h1>React App not built. Run 'npm run build' in frontend/</h1>", status_code=404)
+
+if os.path.exists(frontend_dist):
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="assets")
 
 # Global State & Singletons
 db = ScreeningDatabase()
@@ -170,6 +185,27 @@ def health_check():
         "chamber_interlock": "ARMED" if not chamber_controller.is_interlock_tripped else "TRIPPED"
     }
 
+
+@app.get("/api/v1/dashboard/data")
+def get_dashboard_data():
+    """Returns the full benchmark dataset and pipeline results for the React frontend."""
+    if not pipeline_ready:
+        initialize_pipeline()
+    
+    df = generate_burnin_dataset(n_lots=45, random_state=42)
+    _, _, test_df = split_lots(df)
+    
+    df_proc = preprocessor.transform(test_df)
+    res_a = mod_a.predict_detailed(df_proc)
+    res_b = mod_b.predict(df_proc)
+    final_df = decision_engine.evaluate(res_a, res_b)
+    
+    # We will just serialize the final_df
+    return JSONResponse(content={
+        "status": "success",
+        "total_parts": len(final_df),
+        "data": final_df.replace({np.nan: None}).to_dict(orient="records")
+    })
 
 @app.post("/api/v1/screen/part", response_model=PartScreenResponse)
 def screen_single_part(part: PartScreenRequest):

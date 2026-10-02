@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@theme {
+  --color-ink: #070b14;
+  --color-panel: #0d1424;
+  --color-edge: #1c2a44;
+  --color-accent: #7dd3fc;
+  --color-muted: #8aa0c0;
+  --color-accept: #4ade80;
+  --color-review: #fbbf24;
+  --color-reject: #f87171;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-ink text-[#e6edf7] font-sans antialiased;
+    background-image: radial-gradient(1200px 500px at 70% -10%, rgba(125,211,252,.07), transparent 60%);
+    background-attachment: fixed;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight text-[#e6edf7];
+  }
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-ink;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-edge rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted;
+}

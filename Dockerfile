@@ -20,5 +20,5 @@ COPY . .
 # Expose ports for FastAPI (8000) and Streamlit (8501)
 EXPOSE 8000 8501
 
-# Default command: launch orchestrator
-CMD ["python", "start_services.py", "1"]
+# Default command: launch FastAPI server
+CMD ["python", "-m", "uvicorn", "src.integrations.api:app", "--host", "0.0.0.0", "--port", "8000"]
