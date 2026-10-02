@@ -96,7 +96,7 @@ class DriftPredictor:
         y_delta = (train_clean['log_v168'] - train_clean['log_v0']).values
         
         # 1. Huber Regressor Baseline
-        self.baseline_huber = HuberRegressor(max_iter=600, epsilon=1.35)
+        self.baseline_huber = HuberRegressor(max_iter=2000, epsilon=1.35)
         self.baseline_huber.fit(X, y_delta)
         
         # 2. Primary Gradient Boosting Model (Median / Mean prediction)
