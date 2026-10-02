@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: kavach-drift24-api
+    env: docker
+    dockerfilePath: Dockerfile
+    dockerCommand: python run_api.py
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: HOST
+        value: 0.0.0.0
+      - key: MES_WEBHOOK_URL
+        value: https://mes.space-electronics.internal/api/v1/events
+      - key: HMAC_SECRET_KEY
+        value: space-grade-secret-key-2026
+
+  - type: web
+    name: kavach-drift24-dashboard
+    env: docker
+    dockerfilePath: Dockerfile
+    dockerCommand: streamlit run app/streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8501
+      - key: API_BASE_URL
+        value: https://kavach-drift24-api.onrender.com
