@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+data/synthetic/*
+!data/synthetic/.gitkeep
+.pytest_cache/
+.DS_Store

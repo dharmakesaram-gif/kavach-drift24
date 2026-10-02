@@ -1,0 +1,4 @@
+Method,Recall (Catch Rate),Precision,False Negatives (Catastrophic),False Positives (Scrap),Cost Score (50*FN + 1*FP)
+Static Datasheet Limit Only,0.0%,0.0%,40,0,2000
+Global Z-Score (No Lot Awareness),50.0%,100.0%,20,0,1000
+Module A: Dynamic Lot-Aware Ensemble,100.0%,1.6%,0,2398,2398

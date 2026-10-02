@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: sih26170_screening_api
+    restart: unless-stopped
+    command: python run_api.py
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DATABASE_PATH=/app/data/screening_records.db
+      - MES_WEBHOOK_URL=https://mes.space-electronics.internal/api/v1/events
+      - HMAC_SECRET_KEY=space-grade-secret-key-2026
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+
+  dashboard:
+    build: .
+    container_name: sih26170_streamlit_dashboard
+    restart: unless-stopped
+    command: streamlit run app/streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - STREAMLIT_SERVER_PORT=8501
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+    depends_on:
+      - api

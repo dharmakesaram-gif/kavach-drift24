@@ -1,0 +1,5 @@
+Layer,Recall,Escapes (FN),Cost Score
+1. AEC-Q001 Rules Only,87.5%,5,252
+2. Robust Mahalanobis Only,92.5%,3,173
+3. Isolation Forest Only,97.5%,1,583
+4. Full Layered Ensemble,97.5%,1,520

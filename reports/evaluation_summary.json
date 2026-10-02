@@ -1,0 +1,138 @@
+{
+  "test_lot_count": 8,
+  "test_part_count": 2443,
+  "total_defects_in_test": 40,
+  "defects_caught": 40,
+  "false_negatives_escapes": 0,
+  "false_positives_overkill": 2403,
+  "system_recall": 1.0,
+  "system_precision": 0.0164,
+  "cost_score_50FN_1FP": 2403,
+  "drift_metrics": {
+    "mae_original_scale_uA": 0.403,
+    "mae_log_scale": 0.0261,
+    "mae_huber_baseline_uA": null,
+    "r2_score": 0.9314,
+    "early_rejections_at_24h": 122,
+    "true_defect_rejections": 38,
+    "false_positive_rejections": 84,
+    "chamber_hours_saved": 5472,
+    "fp_chamber_cost_hours": 12096,
+    "mae_defects_only": 6.273
+  },
+  "defect_type_breakdown": {
+    "accelerating": {
+      "count": 9,
+      "caught": 9,
+      "recall": 1.0
+    },
+    "healthy": {
+      "count": 2403,
+      "passed": 0,
+      "false_alarm_rate": 1.0
+    },
+    "high_offset": {
+      "count": 8,
+      "caught": 8,
+      "recall": 1.0
+    },
+    "steep_linear": {
+      "count": 11,
+      "caught": 11,
+      "recall": 1.0
+    },
+    "subtle_in_spec": {
+      "count": 12,
+      "caught": 12,
+      "recall": 1.0
+    }
+  },
+  "baseline_comparison": [
+    {
+      "Method": "Static Datasheet Limit Only",
+      "Recall (Catch Rate)": "0.0%",
+      "Precision": "0.0%",
+      "False Negatives (Catastrophic)": 40,
+      "False Positives (Scrap)": 0,
+      "Cost Score (50*FN + 1*FP)": 2000
+    },
+    {
+      "Method": "Global Z-Score (No Lot Awareness)",
+      "Recall (Catch Rate)": "50.0%",
+      "Precision": "100.0%",
+      "False Negatives (Catastrophic)": 20,
+      "False Positives (Scrap)": 0,
+      "Cost Score (50*FN + 1*FP)": 1000
+    },
+    {
+      "Method": "Module A: Dynamic Lot-Aware Ensemble",
+      "Recall (Catch Rate)": "100.0%",
+      "Precision": "1.6%",
+      "False Negatives (Catastrophic)": 0,
+      "False Positives (Scrap)": 2398,
+      "Cost Score (50*FN + 1*FP)": 2398
+    }
+  ],
+  "sample_reports": [
+    {
+      "part_id": "SN_001176",
+      "lot_id": "LOT_002",
+      "decision": "REJECT",
+      "narrative": "PART FLAGGED FOR EARLY REJECTION AT 24h: SN_001176 (Lot LOT_002) passes the static datasheet limit (50.0 \u00b5A), but displays latent defect characteristics. 24h drift velocity is 0.0300 \u00b5A/h (predicted 168h rate: 0.0155 \u00b5A/h), exceeding the lot safety limit (0.0206 \u00b5A/h). Terminating burn-in at 24h saves 144 hours of chamber thermal stress.",
+      "rule_trace": [],
+      "metrics": {
+        "value_0h": 14.0016,
+        "value_24h": 14.7205,
+        "lot_median_24h": 16.66235,
+        "ratio_to_lot": 0.88,
+        "z_score_pat": -1.16,
+        "drift_rate_24h_uA_per_hr": 0.02995,
+        "pred_drift_rate_168h_uA_per_hr": 0.01545,
+        "safety_slope_limit": 0.02058,
+        "predicted_168h_median": 16.6,
+        "predicted_168h_upper_90": 17.02,
+        "datasheet_limit": 50.0
+      },
+      "audit_trail": {
+        "timestamp": "2026-10-01T22:16:25.909472",
+        "part_id": "SN_001176",
+        "lot_id": "LOT_002",
+        "screening_standard": "AEC-Q001 / MIL-STD-883 Latent Defect Screening",
+        "decision": "REJECT",
+        "composite_risk": 0.8,
+        "primary_reason": "COMPOUND_BORDERLINE_ELEVATION (Flagged by both PAT and Drift models)",
+        "detailed_reasons": "BORDERLINE_ANOMALY (Score 0.38 in review band [0.15, 0.55)); SAFETY_SLOPE_ELEVATED (Drift rate 0.0180 > Review Threshold 0.0157 \u00b5A/h)"
+      }
+    },
+    {
+      "part_id": "SN_001177",
+      "lot_id": "LOT_002",
+      "decision": "REJECT",
+      "narrative": "PART FLAGGED FOR EARLY REJECTION AT 24h: SN_001177 (Lot LOT_002) passes the static datasheet limit (50.0 \u00b5A), but displays latent defect characteristics. Multi-variate ML ensemble detected an anomalous degradation signature (anomaly score 0.80). Terminating burn-in at 24h saves 144 hours of chamber thermal stress.",
+      "rule_trace": [],
+      "metrics": {
+        "value_0h": 17.0669,
+        "value_24h": 17.4932,
+        "lot_median_24h": 16.66235,
+        "ratio_to_lot": 1.05,
+        "z_score_pat": 0.5,
+        "drift_rate_24h_uA_per_hr": 0.01776,
+        "pred_drift_rate_168h_uA_per_hr": 0.01162,
+        "safety_slope_limit": 0.02058,
+        "predicted_168h_median": 19.02,
+        "predicted_168h_upper_90": 19.87,
+        "datasheet_limit": 50.0
+      },
+      "audit_trail": {
+        "timestamp": "2026-10-01T22:16:25.909472",
+        "part_id": "SN_001177",
+        "lot_id": "LOT_002",
+        "screening_standard": "AEC-Q001 / MIL-STD-883 Latent Defect Screening",
+        "decision": "REJECT",
+        "composite_risk": 0.8,
+        "primary_reason": "COMPOUND_BORDERLINE_ELEVATION (Flagged by both PAT and Drift models)",
+        "detailed_reasons": "BORDERLINE_ANOMALY (Score 0.18 in review band [0.15, 0.55)); SAFETY_SLOPE_ELEVATED (Drift rate 0.0167 > Review Threshold 0.0157 \u00b5A/h)"
+      }
+    }
+  ]
+}
