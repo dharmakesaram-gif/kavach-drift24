@@ -50,34 +50,97 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling
+# Custom Premium Styling (Aesthetics Upgrade)
 st.markdown("""
 <style>
-    .metric-card {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        border: 1px solid #334155;
-        border-radius: 10px;
-        padding: 16px;
-        color: white;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap');
+
+    /* Global Typography */
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif;
     }
-    .status-accept {
-        color: #22c55e;
-        font-weight: bold;
+    
+    h1, h2, h3 {
+        font-family: 'Outfit', sans-serif !important;
+        background: -webkit-linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradient-shift 8s ease infinite;
     }
-    .status-review {
-        color: #eab308;
-        font-weight: bold;
+
+    @keyframes gradient-shift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
-    .status-reject {
-        color: #ef4444;
-        font-weight: bold;
+
+    /* Metric Cards Glassmorphism */
+    div[data-testid="metric-container"] {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 20px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
+    div[data-testid="metric-container"]:hover {
+        transform: translateY(-5px) scale(1.02);
+        border-color: rgba(59, 130, 246, 0.4);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Radio Button Navigation Styling */
+    div.row-widget.stRadio > div {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    div.row-widget.stRadio > div > label {
+        background: rgba(255,255,255,0.03);
+        border-radius: 8px;
+        padding: 10px 15px;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+        cursor: pointer;
+    }
+    div.row-widget.stRadio > div > label:hover {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.3);
+        transform: translateX(5px);
+    }
+    div.row-widget.stRadio > div > label[data-checked="true"] {
+        background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, transparent 100%);
+        border-left: 4px solid #3b82f6;
+    }
+
+    /* Status Badges & Callouts */
+    .status-accept { color: #10b981; font-weight: 700; text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+    .status-review { color: #f59e0b; font-weight: 700; text-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+    .status-reject { color: #ef4444; font-weight: 700; text-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+    
     .report-box {
-        background-color: #0f172a;
-        border-left: 5px solid #3b82f6;
-        padding: 16px;
-        border-radius: 6px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: rgba(15, 23, 42, 0.6);
+        border-left: 4px solid #8b5cf6;
+        padding: 24px;
+        border-radius: 0 12px 12px 0;
+        backdrop-filter: blur(8px);
+        box-shadow: inset 0 0 20px rgba(139, 92, 246, 0.05);
+        font-family: 'Inter', sans-serif;
+    }
+    
+    /* Dataframes Customization */
+    div[data-testid="stDataFrame"] {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.1);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -219,8 +282,12 @@ st.sidebar.markdown("""
 # PAGE 1: EXECUTIVE OVERVIEW
 # ==========================================
 if nav_choice == "🚀 Executive Screening Overview":
-    st.title("🛰️ High-Reliability Electronics Burn-In Screening")
-    st.subheader("Predictive Time-Series Latent Defect Detection (SIH26170)")
+    st.markdown("""
+    <div style="text-align: center; padding: 10px 0 30px 0;">
+        <h1 style="font-size: 3.2rem; margin-bottom: 0;">🛰️ Aerospace Electronics Screening</h1>
+        <h3 style="color: #94a3b8; font-weight: 400; margin-top: 10px;">Predictive Time-Series Latent Defect Detection (SIH26170)</h3>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("""
     In space mission payloads, standard static pass/fail testing fails because **latent defects** drift dynamically 
@@ -420,17 +487,28 @@ elif nav_choice == "⚠️ Flagged Parts & Disposition":
         'value_0h', 'value_24h', 'pred_v168', 'pred_v168_upper',
         'z_pat_24h', 'early_rejection_24h', 'primary_reason'
     ]
+    
+    # Apply Premium Pandas Styling
+    styled_df = df_view[display_cols].style.format({
+        'composite_risk_score': '{:.2f}',
+        'value_0h': '{:.2f} µA',
+        'value_24h': '{:.2f} µA',
+        'pred_v168': '{:.2f} µA',
+        'pred_v168_upper': '{:.2f} µA',
+        'z_pat_24h': '{:.1f}σ'
+    }).background_gradient(
+        subset=['composite_risk_score'], cmap='Reds', vmin=0, vmax=1
+    ).background_gradient(
+        subset=['z_pat_24h'], cmap='Oranges', vmin=0, vmax=10
+    ).applymap(
+        lambda x: 'color: #ef4444; font-weight: bold;' if x == 'REJECT' else ('color: #eab308; font-weight: bold;' if x == 'REVIEW' else 'color: #10b981;'),
+        subset=['final_decision']
+    )
+    
     st.dataframe(
-        df_view[display_cols].style.format({
-            'composite_risk_score': '{:.2f}',
-            'value_0h': '{:.2f} µA',
-            'value_24h': '{:.2f} µA',
-            'pred_v168': '{:.2f} µA',
-            'pred_v168_upper': '{:.2f} µA',
-            'z_pat_24h': '{:.1f}σ'
-        }),
+        styled_df,
         use_container_width=True,
-        height=500
+        height=550
     )
 
 
