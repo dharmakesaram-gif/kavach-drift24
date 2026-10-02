@@ -31,5 +31,5 @@ COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 # Expose port for FastAPI (8000)
 EXPOSE 8000
 
-# Default command: launch FastAPI server
-CMD ["python", "-m", "uvicorn", "src.integrations.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Default command: launch FastAPI server on Railway's dynamic $PORT
+CMD uvicorn src.integrations.api:app --host 0.0.0.0 --port ${PORT:-8000}
